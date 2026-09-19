@@ -42,16 +42,16 @@ if (
         }
 
         $conexion->commit();
-        header("Location: ../ventas.php?status=success");
+        header("Location: ../PANEL/ventas.php?status=success");
         exit();
 
     } catch (Exception $e) {
         $conexion->rollBack();
-        header("Location: ../ventas.php?status=error");
+        header("Location: ../PANEL/ventas.php?status=error");
         exit();
     }
 } else {
-    header("Location: ../ventas.php?status=invalid");
+    header("Location: ../PANEL/ventas.php?status=invalid");
     exit();
 }
 ?>

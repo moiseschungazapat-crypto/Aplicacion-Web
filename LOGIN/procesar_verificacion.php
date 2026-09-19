@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../config/conexion.php";
+require_once "../CONFIG/conexion.php";
 
 if(!isset($_SESSION["reset_email"]) || !isset($_SESSION["google_verified"]) || $_SESSION["google_verified"] !== true){
     header("Location: login.php");

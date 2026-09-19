@@ -49,7 +49,7 @@ class Conexion {
                 self::$instancia->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$instancia->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             } catch (PDOException $e) {
-                die("Error de conexión: " . $e->getMessage());
+                throw new RuntimeException('Error de conexión a la base de datos: ' . $e->getMessage(), 0, $e);
             }
         }
         return self::$instancia;

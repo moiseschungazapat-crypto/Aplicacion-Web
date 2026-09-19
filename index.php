@@ -937,9 +937,6 @@ if(is_array($productos) || is_object($productos)){
 </footer>
 
 <div class="whatsapp-widget-container">
-    <div class="whatsapp-chat-bubble">
-        ¿Tiene alguna pregunta? Contáctenos ahora
-    </div>
     <a href="https://wa.me/51931880582?text=Hola,%20quiero%20información%20sobre%20las%20cuentas%20de%20streaming%20por%20favor." target="_blank" class="whatsapp-widget-btn">
         <div class="whatsapp-widget-halo">
             <div class="whatsapp-widget-circle">
@@ -957,32 +954,8 @@ if(is_array($productos) || is_object($productos)){
     right: 25px;
     display: flex;
     align-items: center;
-    gap: 12px;
     z-index: 99999;
     font-family: Arial, sans-serif;
-}
-
-.whatsapp-chat-bubble {
-    background-color: #ffffff;
-    color: #1a1a1a;
-    padding: 12px 18px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 500;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
-    position: relative;
-    white-space: nowrap;
-}
-
-.whatsapp-chat-bubble::after {
-    content: '';
-    position: absolute;
-    right: -7px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 6px 0 6px 8px;
-    border-style: solid;
-    border-color: transparent transparent transparent #ffffff;
 }
 
 .whatsapp-widget-btn {

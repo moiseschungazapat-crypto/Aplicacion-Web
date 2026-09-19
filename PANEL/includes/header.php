@@ -23,6 +23,7 @@ if(!isset($_SESSION["id_usuario"])){
 
 <link rel="stylesheet" href="../ADMINLTE/plugins/fontawesome-free/css/all.min.css">
 <link rel="stylesheet" href="../ADMINLTE/dist/css/adminlte.min.css">
+<link rel="stylesheet" href="../CSS/panel-responsive.css?v=1">
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">

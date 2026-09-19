@@ -1,0 +1,147 @@
+/* Layout responsive del panel administrativo */
+html,
+body{
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+.content-wrapper{
+    overflow-x:hidden;
+}
+
+.chart-container{
+    width:100%;
+}
+
+.chart-container canvas{
+    max-width:100%;
+}
+
+@media (max-width: 767.98px){
+    .main-header{
+        min-height:54px;
+    }
+
+    .main-header .nav-link{
+        padding:.75rem .8rem;
+    }
+
+    .brand-link .brand-text{
+        font-size:.95rem;
+    }
+
+    .content-header{
+        padding:1rem .75rem .35rem;
+    }
+
+    .content-header h1{
+        font-size:1.45rem;
+        line-height:1.2;
+        margin-bottom:.25rem;
+    }
+
+    .content{
+        padding:0 .75rem 1rem;
+    }
+
+    .content .row{
+        margin-left:-.35rem;
+        margin-right:-.35rem;
+    }
+
+    .content .row > [class*="col-"]{
+        padding-left:.35rem;
+        padding-right:.35rem;
+    }
+
+    .dashboard-card{
+        margin-bottom:.7rem;
+        min-height:108px;
+    }
+
+    .dashboard-card:hover{
+        transform:none;
+    }
+
+    .small-box .inner{
+        padding:14px;
+    }
+
+    .small-box h3{
+        font-size:1.65rem;
+        margin-bottom:.25rem;
+    }
+
+    .small-box p{
+        max-width:68%;
+        font-size:.82rem;
+        white-space:normal;
+    }
+
+    .small-box .icon{
+        top:22px;
+        right:10px;
+        font-size:3rem;
+    }
+
+    .card{
+        border-radius:12px;
+    }
+
+    .card-header{
+        padding:.75rem .85rem;
+    }
+
+    .card-title{
+        font-size:1rem;
+        line-height:1.3;
+    }
+
+    .card-body{
+        padding:.75rem;
+    }
+
+    .chart-container{
+        height:245px !important;
+        min-height:245px;
+    }
+
+    .table-card .card-body{
+        overflow-x:auto;
+        padding:0;
+    }
+
+    .table-card table{
+        min-width:560px;
+    }
+
+    .table-card th,
+    .table-card td{
+        padding:.65rem .55rem;
+        font-size:.82rem;
+        white-space:nowrap;
+    }
+
+    .main-sidebar{
+        max-width:82vw;
+    }
+}
+
+@media (max-width: 420px){
+    .content-header h1{
+        font-size:1.3rem;
+    }
+
+    .small-box h3{
+        font-size:1.5rem;
+    }
+
+    .small-box .icon{
+        font-size:2.5rem;
+    }
+
+    .chart-container{
+        height:220px !important;
+        min-height:220px;
+    }
+}

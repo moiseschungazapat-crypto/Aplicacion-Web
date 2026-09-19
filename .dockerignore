@@ -1,0 +1,10 @@
+.git
+.env
+.env.*
+!.env.example
+vendor
+database/*.sql
+ARCHIVOS
+node_modules
+vercel.json
+api

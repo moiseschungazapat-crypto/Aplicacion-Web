@@ -117,5 +117,3 @@ public function MostrarActivos(){
     
 
 }
-
-?>  

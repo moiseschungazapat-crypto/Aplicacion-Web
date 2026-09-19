@@ -77,4 +77,3 @@ if($accion === "estado"){
 
 header("Location: ../PANEL/plataformas.php");
 exit();
-?>

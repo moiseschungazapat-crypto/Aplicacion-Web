@@ -21,7 +21,7 @@ if (
         $stmtVenta->execute([$cliente, $fecha, $total]);
         $idVenta = $conexion->lastInsertId();
 
-        $sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio, subtotal) VALUES (?, ?, ?, ?, ?)";
+        $sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio) VALUES (?, ?, ?, ?)";
         $stmtDetalle = $conexion->prepare($sqlDetalle);
 
         $sqlStock = "UPDATE productos SET stock = stock - ? WHERE id_producto = ?";
@@ -35,9 +35,7 @@ if (
             $idProducto = intval($productos[$i]);
             $cantidad = intval($cantidades[$i]);
             $precio = floatval($precios[$i]);
-            $subtotal = $cantidad * $precio;
-
-            $stmtDetalle->execute([$idVenta, $idProducto, $cantidad, $precio, $subtotal]);
+            $stmtDetalle->execute([$idVenta, $idProducto, $cantidad, $precio]);
             $stmtStock->execute([$cantidad, $idProducto]);
         }
 

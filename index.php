@@ -519,6 +519,10 @@ if(is_array($productos) || is_object($productos)){
         }
 
         $claseOculta = ($contador > 8) ? 'card-item-oculto' : '';
+        $imagenProducto = basename((string)($producto['imagen'] ?? ''));
+        if (!is_file(__DIR__ . "/IMG/productos/" . $imagenProducto)) {
+            $imagenProducto = 'hbo.png';
+        }
 ?>
 
 <div class="producto-card-compact <?php echo $claseOculta; ?>" data-categoria="<?php echo $categoria; ?>">
@@ -527,7 +531,7 @@ if(is_array($productos) || is_object($productos)){
     </span>
     
     <div class="logo-box-compact">
-        <img src="IMG/productos/<?php echo $producto['imagen']; ?>" alt="<?php echo $producto['nombre']; ?>">
+        <img src="IMG/productos/<?php echo htmlspecialchars($imagenProducto); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
     </div>
     
     <div class="card-title-compact"><?php echo $producto['nombre']; ?></div>
@@ -543,7 +547,7 @@ if(is_array($productos) || is_object($productos)){
     <button class="btn-comprar-compact btn-abrir-modal" 
             data-nombre="<?php echo htmlspecialchars($producto['nombre']); ?>" 
             data-precio="<?php echo $producto['precio']; ?>" 
-            data-imagen="IMG/productos/<?php echo $producto['imagen']; ?>">
+            data-imagen="IMG/productos/<?php echo htmlspecialchars($imagenProducto); ?>">
         Comprar <i class="fas fa-shopping-cart ms-1"></i>
     </button>
 </div>
@@ -700,6 +704,10 @@ if(is_array($productos) || is_object($productos)){
                             <?php
                             if(is_array($productos) || is_object($productos)){
                                 foreach($productos as $prod){
+                                    $imagenCombo = basename((string)($prod['imagen'] ?? ''));
+                                    if (!is_file(__DIR__ . "/IMG/productos/" . $imagenCombo)) {
+                                        $imagenCombo = 'hbo.png';
+                                    }
                             ?>
                             <div class="col-md-6">
                                 <label class="card-arma-opcion w-100 m-0" for="chk_<?php echo $prod['id_producto']; ?>">
@@ -709,7 +717,7 @@ if(is_array($productos) || is_object($productos)){
                                                data-nombre="<?php echo htmlspecialchars($prod['nombre']); ?>" 
                                                data-precio="<?php echo $prod['precio']; ?>" 
                                                onchange="recalcularComboArmado()">
-                                        <img src="IMG/productos/<?php echo $prod['imagen']; ?>" style="width:28px; height:28px; object-fit:contain;">
+                                        <img src="IMG/productos/<?php echo htmlspecialchars($imagenCombo); ?>" style="width:28px; height:28px; object-fit:contain;">
                                         <span class="text-white small fw-bold"><?php echo $prod['nombre']; ?></span>
                                     </div>
                                     <span class="badge bg-dark text-secondary border border-secondary">S/ <?php echo number_format($prod['precio'], 2); ?></span>

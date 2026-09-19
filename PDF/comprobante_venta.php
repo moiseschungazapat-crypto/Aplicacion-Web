@@ -4,6 +4,11 @@ require_once("../vendor/autoload.php");
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 
 include("../CONTROLADOR/VentaControlador.php");
 
@@ -44,6 +49,18 @@ $estadoFondo = $ventaActiva ? "#e4f7ea" : "#fde8e7";
 $cliente = htmlspecialchars((string)($venta["cliente"] ?? "Cliente"), ENT_QUOTES, 'UTF-8');
 $fechaEmision = date("d/m/Y H:i", strtotime($venta["fecha"]));
 $numeroComprobante = "EVY-" . str_pad($venta["id_venta"], 6, "0", STR_PAD_LEFT);
+$whatsappUrl = "https://wa.me/51931880582?text=" . rawurlencode("Hola EvyStream, quiero información sobre las cuentas de streaming por favor.");
+$qrWhatsapp = (new Builder(
+    writer: new PngWriter(),
+    writerOptions: [],
+    validateResult: false,
+    data: $whatsappUrl,
+    encoding: new Encoding('UTF-8'),
+    errorCorrectionLevel: ErrorCorrectionLevel::High,
+    size: 180,
+    margin: 8,
+    roundBlockSizeMode: RoundBlockSizeMode::Margin
+))->build()->getDataUri();
 
 $html = '<!DOCTYPE html>
 <html lang="es">
@@ -98,6 +115,8 @@ table { border-collapse: collapse; }
 .summary .total-amount { text-align: right; }
 .summary .total-label, .summary .total-amount { white-space: nowrap; }
 .support { width: 100%; border-top: 1px solid #d9deea; border-bottom: 1px solid #d9deea; padding: 14px 0; }
+.qr-cell { width: 96px; vertical-align: middle; }
+.qr-code { width: 88px; height: 88px; }
 .support-box { vertical-align: middle; padding-right: 16px; }
 .support-icon { width: 42px; height: 42px; background: #e4f7ea; border-radius: 8px; color: #159447; font-size: 21px; font-weight: bold; text-align: center; vertical-align: middle; }
 .support-title { color: #19243d; font-size: 11px; font-weight: bold; padding-left: 10px; }
@@ -220,13 +239,15 @@ $html .= '
 
 <table class="support">
     <tr>
-        <td class="support-box" width="55%">
+        <td class="qr-cell">
+            <img class="qr-code" src="' . $qrWhatsapp . '" alt="Código QR de WhatsApp">
+        </td>
+        <td class="support-box" width="47%">
             <table>
                 <tr>
-                    <td class="support-icon">W</td>
                     <td>
                         <div class="support-title">Contáctanos por WhatsApp</div>
-                        <div class="support-text">+51 931 880 582<br>Disponible para ayudarte.</div>
+                        <div class="support-text">Escanea el código QR<br>o escribe al +51 931 880 582.</div>
                     </td>
                 </tr>
             </table>

@@ -9,6 +9,19 @@ class ClienteModelo {
         $this->db = Conexion::conectar();
     }
 
+    private function normalizarPlataformas($plataforma) {
+        if (!is_array($plataforma)) {
+            $plataforma = preg_split('/\s*,\s*/', (string)$plataforma);
+        }
+
+        $plataformas = array_map('trim', $plataforma);
+        $plataformas = array_values(array_unique(array_filter($plataformas, function ($valor) {
+            return $valor !== '';
+        })));
+
+        return implode(', ', $plataformas);
+    }
+
     public function obtenerClientes() {
         $sql = "SELECT id_cliente, nombre, telefono, correo, plataforma, estado, fecha_vencimiento FROM clientes ORDER BY id_cliente DESC";
         $stmt = $this->db->query($sql);
@@ -39,13 +52,13 @@ class ClienteModelo {
     public function registrarCliente($nombre, $telefono, $correo, $plataforma, $fecha_vencimiento) {
         $sql = "INSERT INTO clientes (nombre, telefono, correo, plataforma, fecha_vencimiento, estado) VALUES (?, ?, ?, ?, ?, TRUE)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$nombre, $telefono, $correo, $plataforma, $fecha_vencimiento]);
+        return $stmt->execute([$nombre, $telefono, $correo, $this->normalizarPlataformas($plataforma), $fecha_vencimiento]);
     }
 
     public function actualizarCliente($id, $nombre, $telefono, $correo, $plataforma, $fecha_vencimiento) {
         $sql = "UPDATE clientes SET nombre = ?, telefono = ?, correo = ?, plataforma = ?, fecha_vencimiento = ? WHERE id_cliente = ?";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$nombre, $telefono, $correo, $plataforma, $fecha_vencimiento, $id]);
+        return $stmt->execute([$nombre, $telefono, $correo, $this->normalizarPlataformas($plataforma), $fecha_vencimiento, $id]);
     }
 
     public function eliminarCliente($id) {

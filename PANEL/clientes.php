@@ -13,8 +13,10 @@ $menu   = "clientes";
 $titulo = "Clientes";
 
 include("../CONTROLADOR/ClienteControlador.php");
+include_once("../CONTROLADOR/PlataformaControlador.php");
 
 $clienteCtrl = new ClienteControlador();
+$plataformaCtrl = new PlataformaControlador();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
     if ($_POST['accion'] === 'guardar') {
@@ -51,6 +53,23 @@ if (isset($_GET['accion']) && $_GET['accion'] === 'eliminar' && isset($_GET['id'
 
 $listaClientes   = $clienteCtrl->ObtenerClientes();
 $metricasCliente = $clienteCtrl->ObtenerMetricas();
+$opcionesPlataforma = [
+    'Netflix Premium',
+    'Disney Plus',
+    'Prime Video',
+    'HBO Max',
+    'Spotify Premium',
+    'Apple TV+',
+    'YouTube Premium',
+    'Paramount+'
+];
+$productosActivos = $plataformaCtrl->MostrarActivos();
+foreach ((array)$productosActivos as $productoActivo) {
+    $nombreProducto = trim((string)($productoActivo['nombre'] ?? ''));
+    if ($nombreProducto !== '' && !in_array($nombreProducto, $opcionesPlataforma, true)) {
+        $opcionesPlataforma[] = $nombreProducto;
+    }
+}
 
 include("includes/header.php");
 include("includes/navbar.php");
@@ -80,6 +99,31 @@ include("includes/sidebar.php");
 .status-activo  { background-color: #d1e7dd; color: #0f5132; font-weight: 600; }
 .status-vencer  { background-color: #fff3cd; color: #664d03; font-weight: 600; }
 .status-vencido { background-color: #f8d7da; color: #842029; font-weight: 600; }
+.plataformas-selector {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    max-height: 190px;
+    overflow-y: auto;
+    padding: 4px;
+}
+.plataforma-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 400;
+}
+.plataforma-check input { flex: 0 0 auto; }
+@media (max-width: 575.98px) {
+    .plataformas-selector { grid-template-columns: 1fr; }
+}
 </style>
 
 <section class="content-header">
@@ -262,7 +306,7 @@ include("includes/sidebar.php");
 <div class="modal fade" id="modalCliente" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content border-0 shadow">
-            <form action="clientes.php" method="POST">
+            <form id="formCliente" action="clientes.php" method="POST">
                 <input type="hidden" name="accion" id="modalAccion" value="guardar">
                 <input type="hidden" name="id_cliente" id="modalIdCliente" value="">
                 
@@ -286,18 +330,16 @@ include("includes/sidebar.php");
                         <input type="email" name="correo" id="modalCorreo" class="form-control" placeholder="correo@ejemplo.com">
                     </div>
                     <div class="form-group">
-                        <label>Plataforma</label>
-                        <select name="plataforma" id="modalPlataforma" class="form-control" required>
-                            <option value="">Seleccione una plataforma</option>
-                            <option value="Netflix Premium">Netflix Premium</option>
-                            <option value="Disney Plus">Disney Plus</option>
-                            <option value="Prime Video">Prime Video</option>
-                            <option value="HBO Max">HBO Max</option>
-                            <option value="Spotify Premium">Spotify Premium</option>
-                            <option value="Apple TV+">Apple TV+</option>
-                            <option value="YouTube Premium">YouTube Premium</option>
-                            <option value="Paramount+">Paramount+</option>
-                        </select>
+                        <label>Plataformas</label>
+                        <div id="modalPlataformas" class="plataformas-selector" role="group" aria-label="Plataformas del cliente">
+                            <?php foreach ($opcionesPlataforma as $opcion): ?>
+                                <label class="plataforma-check">
+                                    <input type="checkbox" name="plataforma[]" value="<?php echo htmlspecialchars($opcion); ?>">
+                                    <span><?php echo htmlspecialchars($opcion); ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <small class="form-text text-muted">Puedes seleccionar una o varias plataformas si el cliente tiene un combo.</small>
                     </div>
                     <div class="form-group">
                         <label>Fecha de Vencimiento</label>
@@ -326,7 +368,9 @@ function prepararModalCrear() {
     document.getElementById('modalNombre').value = '';
     document.getElementById('modalTelefono').value = '';
     document.getElementById('modalCorreo').value = '';
-    document.getElementById('modalPlataforma').value = '';
+    document.querySelectorAll('#modalPlataformas input[name="plataforma[]"]').forEach(function (checkbox) {
+        checkbox.checked = false;
+    });
     document.getElementById('modalFechaVencimiento').value = new Date().toISOString().split('T')[0];
 }
 
@@ -337,7 +381,13 @@ function prepararModalEditar(cliente) {
     document.getElementById('modalNombre').value = cliente.nombre || '';
     document.getElementById('modalTelefono').value = cliente.telefono || '';
     document.getElementById('modalCorreo').value = cliente.correo || '';
-    document.getElementById('modalPlataforma').value = cliente.plataforma || '';
+    const plataformasCliente = String(cliente.plataforma || '')
+        .split(',')
+        .map(function (plataforma) { return plataforma.trim(); })
+        .filter(Boolean);
+    document.querySelectorAll('#modalPlataformas input[name="plataforma[]"]').forEach(function (checkbox) {
+        checkbox.checked = plataformasCliente.includes(checkbox.value);
+    });
     document.getElementById('modalFechaVencimiento').value = cliente.fecha_vencimiento || new Date().toISOString().split('T')[0];
 }
 
@@ -361,4 +411,12 @@ function filtrarTabla() {
         }
     });
 }
+
+document.getElementById('formCliente').addEventListener('submit', function (event) {
+    const seleccionadas = this.querySelectorAll('input[name="plataforma[]"]:checked');
+    if (seleccionadas.length === 0) {
+        event.preventDefault();
+        alert('Selecciona al menos una plataforma.');
+    }
+});
 </script>

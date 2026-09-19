@@ -41,7 +41,8 @@ $productos = $controladorPlat->MostrarActivos();
 
                     <div class="row">
                         <div class="col-md-5">
-                            <label>Plataforma</label>
+                            <label>Plataforma o producto</label>
+                            <small class="form-text text-muted mb-1">Para un combo, agrega una plataforma y repite el proceso con las demás.</small>
                             <select class="form-control" id="producto">
                                 <option value="">Seleccione una plataforma</option>
                                 <?php
@@ -149,6 +150,11 @@ $(document).ready(function(){
 
         if(!idProducto){
             alert("Seleccione una plataforma.");
+            return;
+        }
+
+        if($("#tablaDetalleVenta input[name='productos[]'][value='" + idProducto + "']").length > 0){
+            alert("Esta plataforma ya fue agregada a la venta.");
             return;
         }
 

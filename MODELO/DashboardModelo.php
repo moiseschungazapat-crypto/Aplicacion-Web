@@ -24,6 +24,13 @@ class DashboardModelo {
         return $res ? $res : ['total' => 0];
     }
 
+    public function TotalClientes() {
+        $sql = "SELECT COUNT(*) AS total FROM clientes";
+        $stmt = $this->conexion->query($sql);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $res ? $res : ['total' => 0];
+    }
+
     public function TotalVentas() {
         $sql = "SELECT COUNT(*) AS total FROM ventas WHERE estado = TRUE";
         $stmt = $this->conexion->query($sql);

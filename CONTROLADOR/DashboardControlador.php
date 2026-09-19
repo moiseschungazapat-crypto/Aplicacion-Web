@@ -18,6 +18,10 @@ class DashboardControlador {
         return $this->modelo->TotalUsuarios();
     }
 
+    public function TotalClientes() {
+        return $this->modelo->TotalClientes();
+    }
+
     public function TotalVentas() {
         return $this->modelo->TotalVentas();
     }

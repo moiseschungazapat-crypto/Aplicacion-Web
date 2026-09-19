@@ -18,7 +18,7 @@ include("../CONTROLADOR/DashboardControlador.php");
 $dashboard = new DashboardControlador();
 
 $totalProductos = $dashboard->TotalProductos();
-$totalUsuarios  = $dashboard->TotalUsuarios();
+$totalClientes  = $dashboard->TotalClientes();
 $totalVentas    = $dashboard->TotalVentas();
 $totalIngresos  = $dashboard->TotalIngresos();
 
@@ -140,7 +140,7 @@ Panel Administrativo de EvyStream
 
 <h3>
 
-<?php echo $totalUsuarios["total"] ?? 0; ?>
+<?php echo $totalClientes["total"] ?? 0; ?>
 
 </h3>
 
